@@ -7,7 +7,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
-    
+
     /**
      * @param {React.BaseSyntheticEvent} e
      */
@@ -27,7 +27,9 @@ const Login = () => {
             <div className="w-screen h-full grid place-items-center overflow-hidden pb-20">
                 <div className="card w-96 bg-base-100 shadow-xl overflow-hidden">
                     <div className="card-body p-0">
-                        <h2 className="card-title bg-primary light:text-neutral-300 dark:text-neutral-200 p-4">Sign in to Chat App!</h2>
+                        <h2 className="card-title bg-primary light:text-neutral-300 dark:text-neutral-200 p-4">
+                            Sign in to Chat App!
+                        </h2>
                         <form
                             onSubmit={handleSubmit}
                             className="card-actions flex flex-col items-center px-4 pb-6 pt-6 gap-6"
@@ -43,7 +45,11 @@ const Login = () => {
                                 className="input input-bordered w-full max-w-xs focus:outline-primary"
                             />
                             <button type="submit" className="btn btn-primary ml-auto mr-4 w-24">
-                                { !loading ? <span>Sign in</span> : <span className="loading loading-spinner loading-sm"></span>}
+                                {!loading ? (
+                                    <span>Sign in</span>
+                                ) : (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                )}
                             </button>
                         </form>
                     </div>
