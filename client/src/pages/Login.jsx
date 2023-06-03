@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeChange from "@_components/ThemeChange";
+import { sleep } from "@_utils/helper";
 
 const Login = () => {
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
     
     /**
      * @param {React.BaseSyntheticEvent} e
      */
-    const handleSubmit = (e) => {
-        console.log(e.type, "clicked!");
-        
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        await sleep(5000);
+        setLoading(false);
         navigate("/chat");
     };
 
@@ -38,8 +42,8 @@ const Login = () => {
                                 placeholder="Password"
                                 className="input input-bordered w-full max-w-xs focus:outline-primary"
                             />
-                            <button type="submit" className="btn btn-primary ml-auto mr-4">
-                                Sign in
+                            <button type="submit" className="btn btn-primary ml-auto mr-4 w-24">
+                                { !loading ? <span>Sign in</span> : <span className="loading loading-spinner loading-sm"></span>}
                             </button>
                         </form>
                     </div>

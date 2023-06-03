@@ -9,7 +9,20 @@ export default {
     },
     plugins: [require("daisyui")],
     daisyui: {
-        themes: ["light", "dark"],
+        themes: [{
+            light: {
+                ...require("daisyui/src/theming/themes")["[data-theme=light]"],
+                "primary": "#0d9488",
+                "secondary": "#86efac",
+                "accent": "#d9f99d"
+            },
+            dark: {
+            ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
+            "primary": "#0a756c",
+            "secondary": "#86efac",
+            "accent": "#d9f99d"
+            },
+        }],
         base: true
     },
 };

@@ -5,6 +5,7 @@
             "@_components/*": ["src/components/*"],
             "@_pages/*": ["src/pages/*"],
             "@_routes/*": ["src/routes/*"],
+            "@_utils/*": ["src/utils/*"],
         }
     }
 }

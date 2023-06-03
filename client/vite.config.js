@@ -9,6 +9,7 @@ export default defineConfig({
             "@_components": path.resolve(__dirname, './src/components'),
             "@_pages": path.resolve(__dirname, './src/pages'),
             "@_routes": path.resolve(__dirname, './src/routes'),
+            "@_utils": path.resolve(__dirname, './src/utils'),
         }
     },
     plugins: [react()],
