@@ -2,6 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import Login from "@_pages/Login";
 import Chat from "@_pages/Chat";
 import Root from "@_pages/Root";
+import Guard from "@_components/Guard";
 
 const router = createBrowserRouter([
     {
@@ -14,11 +15,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "login",
-                element: <Login />
+                element: <Guard> <Login /> </Guard>
             },
             {
                 path: "chat",
-                element: <Chat />
+                element: <Guard> <Chat /> </Guard>
             }
         ]
     },
