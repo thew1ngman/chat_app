@@ -15,18 +15,17 @@ config();
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
-const sessionSecret = nanoid();
 
 app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     name: 'session.id',
-    secret: sessionSecret,
+    secret: process.env.SECRET_TOKEN,
     resave: false,
     saveUninitialized: false,
     sameSite: 'none',
-    cookie: { secure: false, maxAge: null } // 7 days
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 7 } // 7 days
 }));
 
 
@@ -36,9 +35,7 @@ app.get("/", async (_, res) => {
 
 
 app.post("/session-check", (req, res) => {
-    if (req.session.user) {
-        return res.json({ isAuthenticated: true })
-    };
+    if (req.session.user) return res.json({ isAuthenticated: true });
     return res.json({ isAuthenticated: false });
 });
 
@@ -58,7 +55,7 @@ app.post('/login', validateUser, async (req, res, next) => {
 
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.clearCookie('sessionId').json({ isAuthenticated: false });
+    res.clearCookie('session.id').json({ isAuthenticated: false });
 });
 
 

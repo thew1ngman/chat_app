@@ -1,6 +1,7 @@
 import axios from "axios";
 import ThemeChange from "./ThemeChange";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 
 
 const Topnav = () => {
@@ -21,20 +22,7 @@ const Topnav = () => {
             <div className="flex items-center gap-2">
                 <ThemeChange />
                 <button className="btn btn-ghost btn-sm" onClick={() => window.my_modal_2.showModal()} title="Log Out">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.75}
-                        stroke="currentColor"
-                        className="w-7 h-7"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                        />
-                    </svg>
+                    <ArrowLeftOnRectangleIcon className="h-7 w-7" aria-hidden="true"/>
                 </button>
                 <dialog id="my_modal_2" className="modal">
                     <form method="dialog" className="modal-box">
