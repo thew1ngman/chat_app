@@ -1,11 +1,11 @@
 import SideList from "@_components/SideList";
 
-const Contacts = () => {
+const GroupConversation = () => {
     return ( 
         <div className="w-full flex">
-            <SideList name="Contacts"/>
+            <SideList name="Groups" />
         </div>
      );
 }
  
-export default Contacts;
+export default GroupConversation;

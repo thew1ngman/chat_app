@@ -57,11 +57,11 @@ const Login = () => {
     }
 
     return (
-        <>
+        <div className="h-screen overflow-hidden">
             <div className="p-4 flex justify-end">
                 <ThemeChange />
             </div>
-            <div className="w-screen h-full grid place-items-center overflow-hidden pb-24">
+            <div className="w-screen h-full grid place-items-center pb-32">
                 <div className="card w-96 bg-base-100 shadow-xl overflow-hidden">
                     <div className="card-body p-0">
                         <h2 className="card-title bg-primary light:text-neutral-300 dark:text-neutral-200 p-4">
@@ -100,7 +100,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

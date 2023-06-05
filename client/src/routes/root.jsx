@@ -4,7 +4,7 @@ import Chat from "@_pages/Chat";
 import Root from "@_pages/Root";
 import Guard from "@_components/Guard";
 import SingleConversation from "@_pages/chat/SingleConversation";
-import GroupConversation from "@_pages/chat/GroupConversations";
+import GroupConversation from "@_pages/chat/GroupConversation";
 import Contacts from "@_pages/chat/Contacts";
 
 const router = createBrowserRouter([

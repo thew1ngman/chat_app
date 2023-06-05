@@ -6,7 +6,7 @@ const Chat = () => {
     return ( 
         <>
             <Topnav />
-            <main className="w-full h-full flex bg-base-300">
+            <main className="w-full h-[calc(100vh-50px)] flex bg-base-300">
                 <Sidenav />
                 <Outlet />
             </main>
