@@ -1,3 +1,4 @@
+import { authenticateUser } from '../controllers/user-controller.js';
 import { readFile } from '../utils/helpers.js';
 
 /**
@@ -16,19 +17,28 @@ export async function isAuthenticated(req, res, next) {
 }
 
 /**
- * Match check the user input info agains the saved user info.
+ * Match check the user input info against the saved user info.
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
 export async function validateUser(req, res, next) {
     const { email, password } = req.body;
-    const { users } = await readFile(`${__basedir}\\src\\data\\dummy-users.json`);
-    const user = users.find(user => user.email === email && user.password === password);
+    let userData = null;
+    let extra = null;
 
-    if (!user) return res.send({ error: 'Invalid credentials!' });
+    if (email == 'admin@email.com') { // initial user to setup other accounts
+        const { users } = await readFile(`${__basedir}\\src\\data\\dummy-users.json`);
+        userData = users.find(user => user.email === email && user.password === password);
+    } else {
+        const [ user, extraData ] = await authenticateUser(req.body);
+        userData = user;
+        extra = extraData
+    }
 
-    delete user.password;
-    req.user = user;
+    if (!userData || extra.type == 'error') return res.send(extra);
+
+    delete userData.password;
+    req.user = userData;
     next();
 }
