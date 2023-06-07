@@ -58,7 +58,7 @@ const CreateUser = () => {
                             type="text"
                             name="name"
                             placeholder="Name"
-                            className="input input-bordered w-full max-w-xs"
+                            className="input input-bordered w-full max-w-xs placeholder:text-base-content/40"
                             required
                         />
                     </div>
@@ -68,7 +68,7 @@ const CreateUser = () => {
                             type="email"
                             name="email"
                             placeholder="Email"
-                            className="input input-bordered w-full max-w-xs"
+                            className="input input-bordered w-full max-w-xs placeholder:text-base-content/40"
                             required
                         />
                     </div>
@@ -78,7 +78,7 @@ const CreateUser = () => {
                             type="password"
                             name="password"
                             placeholder="Password"
-                            className="input input-bordered w-full max-w-xs"
+                            className="input input-bordered w-full max-w-xs placeholder:text-base-content/40"
                             required
                         />
                     </div>

@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const links = [
     { link: "conversations", name: "Chats", icon: <ChatBubbleLeftIcon className="h-7 w-7" aria-hidden="true" /> },
     { link: "group-conversations", name: "Chat Groups", icon: <ChatBubbleLeftRightIcon className="h-7 w-7" aria-hidden="true" /> },
-    { link: "contacts", name: "Contacts", icon: <UsersIcon className="h-7 w-7" aria-hidden="true" /> },
+    // { link: "contacts", name: "Contacts", icon: <UsersIcon className="h-7 w-7" aria-hidden="true" /> },
     { link: "create-user", name: "Create User", icon: <UserPlusIcon className="h-7 w-7" aria-hidden="true" /> },
 ];
 

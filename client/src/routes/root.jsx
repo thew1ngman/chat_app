@@ -2,7 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import SingleConversation from "@_pages/chat/SingleConversation";
 import GroupConversation from "@_pages/chat/GroupConversation";
 import CreateUser from "@_pages/chat/CreateUser";
-import Contacts from "@_pages/chat/Contacts";
+// import Contacts from "@_pages/chat/Contacts";
 import Guard from "@_components/Guard";
 import Login from "@_pages/Login";
 import Chat from "@_pages/Chat";
@@ -37,10 +37,10 @@ const router = createBrowserRouter([
                         path: "group-conversations",
                         element: <GroupConversation />
                     },
-                    {
-                        path: "contacts",
-                        element: <Contacts />
-                    },
+                    // {
+                    //     path: "contacts",
+                    //     element: <Contacts />
+                    // },
                     {
                         path: "create-user",
                         element: <CreateUser />

@@ -1,3 +1,4 @@
+import { createUser, searchUserByEmail } from './src/controllers/user-controller.js';
 import { validateUser } from './src/middlewares/auth.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -8,7 +9,6 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import path from 'path';
-import { createUser } from './src/controllers/user-controller.js';
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -79,6 +79,11 @@ app.post('/create-user', async (req, res) => {
     const data = await createUser(req.body);
     res.json(data);
 });
+
+app.post('/search-user', async (req, res) => {
+    const queryData = await searchUserByEmail(req.body);
+    return res.json(queryData);
+})
 
 io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
