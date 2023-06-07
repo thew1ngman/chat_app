@@ -2,10 +2,12 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { sleep, toastNotify } from "@_utils/helper";
 import { useRef, useState } from "react";
 import axios from "axios";
+import UserCard from "./UserCard";
 
 const SearchPeople = () => {
     const [loading, setLoading] = useState(false);
     const [inputEmail, setInputEmail] = useState('');
+    const [searchedUser, setSearchedUser] = useState(null);
     const searchForm = useRef(null);
 
     const handleSearch = async (e) => {
@@ -13,15 +15,21 @@ const SearchPeople = () => {
         if (inputEmail.length < 3) return toastNotify('error', 'Please enter email.')
         
         setLoading(true);
-        await sleep(3000);
         axios.post('/search-user', { email: inputEmail })
             .then(res => {
                 const [ user, extraData ] = res.data;
 
-                if (!user) toastNotify(extraData.type, extraData.message);
+                if (!user) {
+                    toastNotify(extraData.type, extraData.message);
+                    setLoading(false);
+                    searchForm.current.reset();
+                    return;
+                }
                 
+                setSearchedUser(user);
                 setLoading(false);
                 searchForm.current.reset();
+                
             })
             .catch(err => {
                 console.log(err)
@@ -50,10 +58,8 @@ const SearchPeople = () => {
                             {loading ? <span className="loading loading-spinner"></span> : 'Search'}
                         </button>
                     </div>
-                    <div className="divider"></div>
-                    <div>
-                        <span className="text-neutral-content block text-center">Results</span>
-                    </div>
+                    <div className="divider my-3"></div>
+                    {searchedUser?.id && <UserCard userData={searchedUser} atContactList={false}/>}
                 </form>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>
