@@ -81,7 +81,7 @@ app.post('/create-user', async (req, res) => {
 });
 
 app.post('/search-user', async (req, res) => {
-    const queryData = await searchUserByEmail(req.body);
+    const queryData = await searchUserByEmail(req.body.email);
     return res.json(queryData);
 })
 

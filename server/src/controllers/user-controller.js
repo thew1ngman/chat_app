@@ -51,7 +51,7 @@ export async function authenticateUser(loginInput) {
  * @param {string} email
  */
 export async function searchUserByEmail(email) {
-    const user = await prisma.user.findFirst({ where: { email: email } });
+    const user = await prisma.user.findFirst({ where: { ['email']: email } });
     let type = 'error';
     let message = 'User not found!'
 

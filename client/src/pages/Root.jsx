@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 import axios from "axios";
 
 // set defaults for axios
@@ -8,8 +9,11 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
 const Root = () => {
-    return ( 
-        <Outlet />
+    return (
+        <>
+            <Toaster />
+            <Outlet />
+        </>
      );
 }
 

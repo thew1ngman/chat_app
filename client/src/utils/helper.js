@@ -1,3 +1,6 @@
+
+import toast from "react-hot-toast"
+
 /**
  * Creates an artificial delay.
  * @param {number} delay in milliseconds
@@ -16,3 +19,5 @@ export const getCookie = (name) => {
 
     return cookie;
 }
+
+export const toastNotify = (type, message) => toast[type](message);

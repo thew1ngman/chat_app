@@ -3,7 +3,6 @@ import Topnav from "@_components/Topnav";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { io } from "socket.io-client";
-import { Toaster } from 'react-hot-toast';
 
 const Chat = () => {
     // establish connection;
@@ -17,7 +16,6 @@ const Chat = () => {
 
     return ( 
         <>
-            <Toaster />
             <main className="w-full h-full bg-base-300 flex flex-col">
                 <div>
                     <Topnav />

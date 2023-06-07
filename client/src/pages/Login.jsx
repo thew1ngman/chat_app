@@ -1,8 +1,11 @@
+import ThemeChange from "@_components/ThemeChange";
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ThemeChange from "@_components/ThemeChange";
 import { sleep } from "@_utils/helper";
+import toast from "react-hot-toast"
 import axios from "axios";
+
+const notify = (type, message) => toast[type](message);
 
 const Login = () => {
     const navigate = useNavigate();
@@ -18,6 +21,7 @@ const Login = () => {
      * @param {React.BaseSyntheticEvent} e
      */
     const changeHandler = (e) => {
+        console.log(e.target.value)
         if (errorData) setErrorData(false);
         setCreds({...creds, [e.target.type]: e.target.value });
     }
@@ -40,7 +44,9 @@ const Login = () => {
                 setLoading(false);
                 navigate('/chat');
             }
-            if (data.error === 'Invalid credentials!' || !data.isAuthenticated) {
+            if (data.type === 'error' || !data.isAuthenticated) {
+                console.log(data.type)
+                notify('error', data.message)
                 setErrorData(true);
                 setLoading(false);
                 setLoginError(true);
@@ -48,7 +54,7 @@ const Login = () => {
                 form.current.reset();
             }
         }).catch((error) => {
-            console.log(error);
+            notify('error', error.message)
             setLoading(false);
             setLoginError(true);
             setCreds({ email: "", password: "" });
@@ -87,8 +93,7 @@ const Login = () => {
                                 className={`input w-full max-w-xs input-bordered focus:outline-primary`}
                             />
                             <div className="flex justify-between px-4 items-center w-full">
-                                <p className="text-error">{errorData ? "Invalid credentials!" : ""}</p>
-                                <button type="submit" disabled={loading} className="btn btn-primary w-24 disabled:cursor-not-allowed">
+                                <button type="submit" disabled={loading} className="btn btn-primary w-24 disabled:cursor-not-allowed ml-auto">
                                     {!loading ? (
                                         <span>Sign in</span>
                                     ) : (
