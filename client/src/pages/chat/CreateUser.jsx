@@ -32,17 +32,18 @@ const CreateUser = () => {
             if (error) notify(error.type, error.message);
             if (user) notify('success', 'User successfully created!');
             setLoading(false);
+            form.current.reset();
         }).catch(err => {
             notify( 'error', err.message)
             setLoading(false);
+            form.current.reset();
         });
 
-        form.current.reset();
     }
 
     useEffect(() => {
         const role = getCookie('role');
-        if (role != 'admin') navigate('/chat');
+        if (role.toLocaleLowerCase() != 'admin') navigate('/chat');
     }, []);
 
     return (

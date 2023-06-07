@@ -9,6 +9,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import path from 'path';
+import { addToContacts } from './src/controllers/contact-list-controller.js';
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -75,13 +76,21 @@ app.get('/logout', (req, res) => {
 });
 
 app.post('/create-user', async (req, res) => {
-    if (req.session.user.role != 'admin') return res.status(401);
+    if (req.session.user.role.toLowerCase() != 'admin') return res.status(401).json([
+        null, { type: 'error', message: 'Unauthorized request.'}
+    ]);
     const data = await createUser(req.body);
     res.json(data);
 });
 
 app.post('/search-user', async (req, res) => {
     const queryData = await searchUserByEmail(req.body.email);
+    return res.json(queryData);
+})
+
+app.post('/add-user-contact', async (req, res) => {
+    const { userId, contactUserId } = req.body;
+    const queryData = await addToContacts( parseInt(userId), parseInt(contactUserId) );
     return res.json(queryData);
 })
 

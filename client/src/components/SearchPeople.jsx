@@ -19,14 +19,9 @@ const SearchPeople = () => {
             .then(res => {
                 const [ user, extraData ] = res.data;
 
-                if (!user) {
-                    toastNotify(extraData.type, extraData.message);
-                    setLoading(false);
-                    searchForm.current.reset();
-                    return;
-                }
+                if (user) setSearchedUser(user);
                 
-                setSearchedUser(user);
+                toastNotify(extraData.type, extraData.message);
                 setLoading(false);
                 searchForm.current.reset();
                 
@@ -39,7 +34,7 @@ const SearchPeople = () => {
     
     return (
         <>
-            <button className="btn btn-primary btn-outline w-full capitalize" onClick={() => window.search_modal.showModal()}>
+            <button className="btn bg-base-100 w-full capitalize" onClick={() => window.search_modal.showModal()}>
                 Search People
                 <MagnifyingGlassIcon className="w-5 h-5 stroke-2" />
             </button>
@@ -59,7 +54,7 @@ const SearchPeople = () => {
                         </button>
                     </div>
                     <div className="divider my-3"></div>
-                    {searchedUser?.id && <UserCard userData={searchedUser} atContactList={false}/>}
+                    {searchedUser?.id && <UserCard userData={searchedUser} atContactList={false} userHandler={setSearchedUser}/>}
                 </form>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

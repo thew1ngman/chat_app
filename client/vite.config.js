@@ -10,6 +10,7 @@ export default defineConfig({
             "@_pages": path.resolve(__dirname, './src/pages'),
             "@_routes": path.resolve(__dirname, './src/routes'),
             "@_utils": path.resolve(__dirname, './src/utils'),
+            "@_store": path.resolve(__dirname, './src/store'),
         }
     },
     plugins: [react()],

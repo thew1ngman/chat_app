@@ -6,6 +6,7 @@
             "@_pages/*": ["src/pages/*"],
             "@_routes/*": ["src/routes/*"],
             "@_utils/*": ["src/utils/*"],
+            "@_store/*": ["src/store/*"],
         }
     }
 }

@@ -21,7 +21,6 @@ const Login = () => {
      * @param {React.BaseSyntheticEvent} e
      */
     const changeHandler = (e) => {
-        console.log(e.target.value)
         if (errorData) setErrorData(false);
         setCreds({...creds, [e.target.type]: e.target.value });
     }

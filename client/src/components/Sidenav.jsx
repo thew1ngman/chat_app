@@ -18,7 +18,7 @@ const Sidenav = () => {
             <ul className="h-full flex flex-col pt-1 px-1">
                 {
                     links.map((link, index) => {
-                        if (role != 'admin' && link.link == 'create-user') return; 
+                        if (role.toLocaleLowerCase() != 'admin' && link.link == 'create-user') return; 
                         return (
                             <li key={index}>
                                 <NavLink
