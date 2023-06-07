@@ -11,18 +11,26 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique @db.VarChar(255)
-  password  String
-  name      String?    @db.VarChar(255)
-  role      Role
-  chatLines ChatLine[]
+  id          Int           @id @default(autoincrement())
+  email       String        @unique @db.VarChar(255)
+  password    String
+  name        String?       @db.VarChar(255)
+  role        Role
+  chatLines   ChatLine[]
+  ContactList ContactList[]
+}
+
+model ContactList {
+  id            Int  @id @default(autoincrement())
+  userId        Int
+  contactUser   User @relation(fields: [contactUserId], references: [id])
+  contactUserId Int
 }
 
 model Chat {
-  id        Int        @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   conversationId String
-  chatLines ChatLine[]
+  chatLines      ChatLine[]
 }
 
 model ChatLine {
