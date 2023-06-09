@@ -7,6 +7,7 @@ import Guard from "@_components/Guard";
 import Login from "@_pages/Login";
 import Chat from "@_pages/Chat";
 import Root from "@_pages/Root";
+import SingleChatRoom from "@_pages/chat/single-conversation/SingleChatRoom";
 
 const router = createBrowserRouter([
     {
@@ -31,7 +32,13 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "conversations",
-                        element: <SingleConversation />
+                        element: <SingleConversation />,
+                        children: [
+                            {
+                                path: ':contactName',
+                                element: <SingleChatRoom />
+                            }
+                        ]
                     },
                     {
                         path: "group-conversations",

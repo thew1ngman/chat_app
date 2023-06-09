@@ -6,6 +6,7 @@ import SideList from "@_components/SideList";
 import { getCookie } from "@_utils/helper";
 import { useEffect } from "react";
 import axios from "axios";
+import { Outlet } from "react-router-dom";
 
 const SingleConversation = () => {
     const { contacts, storeContact } = useUserContactStore();
@@ -35,10 +36,7 @@ const SingleConversation = () => {
             <SideList name="Chats">
                 <ContactList contacts={contacts} />
             </SideList>
-            <div className="w-full py-2.5 px-3 flex flex-col justify-between gap-4">
-                <ChatHistory />
-                <ChatInputBox />
-            </div>
+            <Outlet />
         </div>
     );
 };

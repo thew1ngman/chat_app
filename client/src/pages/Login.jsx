@@ -1,7 +1,7 @@
 import ThemeChange from "@_components/ThemeChange";
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { sleep, toastNotify } from "@_utils/helper";
+import { toastNotify } from "@_utils/helper";
 import axios from "axios";
 
 const Login = () => {
@@ -9,7 +9,7 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false);
     const [creds, setCreds] = useState({ email: "", password: "" });
-    const [loginError, setLoginError] = useState(false);
+    // const [loginError, setLoginError] = useState(false);
     const [errorData, setErrorData] = useState(false);
 
     const form = useRef(null);
@@ -28,7 +28,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (creds.email === "" || creds.password === "") return setLoginError(true);
+        // if (creds.email === "" || creds.password === "") return setLoginError(true);
 
         setLoading(true);
         axios
@@ -37,6 +37,7 @@ const Login = () => {
                 const data = response.data;
 
                 if (data.isAuthenticated) {
+                    // console.log(data);
                     setLoading(false);
                     navigate("/chat");
                 }
@@ -45,7 +46,7 @@ const Login = () => {
                     toastNotify("error", data.message);
                     setErrorData(true);
                     setLoading(false);
-                    setLoginError(true);
+                    // setLoginError(true);
                     setCreds({ email: "", password: "" });
                     form.current.reset();
                 }
@@ -53,7 +54,7 @@ const Login = () => {
             .catch((error) => {
                 toastNotify("error", error.message);
                 setLoading(false);
-                setLoginError(true);
+                // setLoginError(true);
                 setCreds({ email: "", password: "" });
                 form.current.reset();
             });

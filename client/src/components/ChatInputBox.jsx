@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { getCookie } from "@_utils/helper";
+import useChatStore, { socket } from "@_store/chats";
 
 const ChatInputBox = () => {
     const editable = useRef(null);
     const [placeholder, setPlaceholder] = useState('Type here...');
+
+    const currentDestination = useChatStore(state => state.currentDestination);
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -12,8 +15,10 @@ const ChatInputBox = () => {
 
         if (!text) return editable.current.focus();
 
-        window.socket.emit('chat message', {
-            fromUser: getCookie('user.id'),
+        socket.emit('chat message', {
+            originUser: parseInt(getCookie('user.id')),
+            destinationId: parseInt(currentDestination.id) || null, // null on group ID or user ID
+            isGroupChat: currentDestination.isGroupChat || false,
             message: text
         }); //window.socket initialized at Chat.jsx
 
@@ -34,7 +39,7 @@ const ChatInputBox = () => {
                 ref={editable}
                 placeholder={placeholder}
                 onBlur={blurHandler}
-                className="relative w-full h-max rounded-md outline-none grow-0 break-all whitespace-break-spaces before:block before:absolute before:text-base-content/60 before:content-[attr(placeholder)] focus:before:content-['']">
+                className="relative w-full h-max caret-primary rounded-md outline-none grow-0 break-all whitespace-break-spaces before:block before:absolute before:text-base-content/60 before:content-[attr(placeholder)] focus:before:content-['']">
             </div>
             <button className="rounded-full hover:bg-primary hover:text-white p-1.5 mt-auto" onClick={sendMessage}>
                 <PaperAirplaneIcon className="w-7 h-7" />

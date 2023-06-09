@@ -1,20 +1,20 @@
 import Sidenav from "@_components/Sidenav";
 import Topnav from "@_components/Topnav";
+import { socket } from "@_store/chats.js";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { io } from "socket.io-client";
 
 const Chat = () => {
-    // establish connection;
-    window.socket = io(import.meta.env.VITE_AXIOS_BASE_URL, {
-        autoConnect: false,
-    });
 
+    
     useEffect(() => {
-        window.socket.connect();
+        socket.on("disconnect", (reason) => {
+            console.log(reason)
+        });
+        socket.connect();
     }, []);
 
-    return ( 
+    return (
         <>
             <main className="w-full h-full bg-base-300 flex flex-col">
                 <div>
@@ -26,6 +26,6 @@ const Chat = () => {
                 </div>
             </main>
         </>
-     );
-}
+    );
+};
 export default Chat;

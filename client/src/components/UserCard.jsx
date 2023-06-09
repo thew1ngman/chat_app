@@ -5,7 +5,7 @@ import axios from "axios";
 
 const UserCard = ({ userData, atContactList, userHandler }) => {
     const { id, name, email } = userData;
-    const { storeContact, deleteContact, triggerRender } = useUserContactStore((state) => state);
+    const { storeContact, deleteContact } = useUserContactStore((state) => state);
 
     const openDropdown = (e) => {
         e.preventDefault();
@@ -22,7 +22,7 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
             })
             .then((res) => {
                 const [contact, extraData] = res.data;
-                toastNotify(extraData.type, extraData.message);
+                // toastNotify(extraData.type, extraData.message);
                 if (contact != null) {
                     storeContact([{ ...contact.user, db_id: contact.id }]);
                     userHandler(null);
@@ -42,7 +42,7 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
             })
             .then((res) => {
                 const [_, extraData] = res.data;
-                toastNotify(extraData.type, extraData.message);
+                // toastNotify(extraData.type, extraData.message);
                 deleteContact(userData.db_id);
             })
             .catch((err) => {
@@ -58,9 +58,15 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
             >
                 <EllipsisVerticalIcon className="w-6 h-6" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-box w-52">
-                <li> <button>Delete</button> </li>
-                <li> <a>Item 2</a> </li>
+            <ul tabIndex={0} className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box w-52">
+                <li>
+                    <button className="hover:bg-error/30" onClick={deleteFromContactList}>
+                        Delete
+                    </button>
+                </li>
+                <li>
+                    <span>. . .</span>
+                </li>
             </ul>
         </div>
     );
@@ -76,7 +82,7 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
     );
 
     return (
-        <div className="px-4 py-2.5 rounded-lg flex items-center justify-between hover:bg-base-100">
+        <div className="px-4 py-2.5 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <div className="avatar">
                     <div className="w-9 h-9 rounded-full">
@@ -87,8 +93,9 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
                     </div>
                 </div>
                 <div className="space-y-0.5">
-                    <div className="text-sm">
-                        {name} {id == getCookie("user.id") && <span className="text-xs font-bold text-primary">YOU</span>}
+                    <div className="text-sm space-x-1">
+                        <span>{name}</span>
+                        {id == getCookie("user.id") && <span className="text-xs font-bold text-primary">YOU</span>}
                     </div>
                     {!atContactList && <div className="text-xs text-base-content">{email}</div>}
                 </div>
