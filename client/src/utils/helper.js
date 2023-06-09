@@ -20,4 +20,28 @@ export const getCookie = (name) => {
     return cookie;
 }
 
+/**
+ * @param {string} name
+ * @param {string} message
+ */
 export const toastNotify = (type, message) => toast[type](message);
+
+/**
+ * Returns an array with unique objects.
+ * @param {Array} arr 
+ * @param {string} identifier unique identifier of an object - like ID
+ */
+export const uniqueObjectsArray = (arr, identifier) => {
+    
+    const uniqueIds = [];
+    const uniqueArr = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        const id = arr[i][identifier];
+        if (uniqueIds.includes(id)) continue;
+        uniqueIds.push(id);
+        uniqueArr.push(arr[i]);
+    }
+
+    return uniqueArr;
+}

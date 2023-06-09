@@ -34,8 +34,8 @@ const SearchPeople = () => {
     
     return (
         <>
-            <button className="btn bg-base-100 w-full capitalize" onClick={() => window.search_modal.showModal()}>
-                Search People
+            <button className="btn btn-sm btn-primary rounded-full px-4 font-normal capitalize" onClick={() => window.search_modal.showModal()}>
+                Search
                 <MagnifyingGlassIcon className="w-5 h-5 stroke-2" />
             </button>
             <dialog id="search_modal" className="modal">
@@ -47,7 +47,7 @@ const SearchPeople = () => {
                             name="search"
                             id="search"
                             placeholder="Search by Email"
-                            className="input input-primary w-full input-bordered"
+                            className="input w-full bg-base-200"
                         />
                         <button type="submit" className="btn btn-primary w-24">
                             {loading ? <span className="loading loading-spinner"></span> : 'Search'}

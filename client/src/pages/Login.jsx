@@ -1,11 +1,8 @@
 import ThemeChange from "@_components/ThemeChange";
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { sleep } from "@_utils/helper";
-import toast from "react-hot-toast"
+import { sleep, toastNotify } from "@_utils/helper";
 import axios from "axios";
-
-const notify = (type, message) => toast[type](message);
 
 const Login = () => {
     const navigate = useNavigate();
@@ -22,8 +19,8 @@ const Login = () => {
      */
     const changeHandler = (e) => {
         if (errorData) setErrorData(false);
-        setCreds({...creds, [e.target.type]: e.target.value });
-    }
+        setCreds({ ...creds, [e.target.type]: e.target.value });
+    };
 
     /**
      * @param {React.BaseSyntheticEvent} e
@@ -32,34 +29,35 @@ const Login = () => {
         e.preventDefault();
 
         if (creds.email === "" || creds.password === "") return setLoginError(true);
-        
-        setLoading(true);
-        await sleep(1500);
-        axios.post('/login', creds).then((response) => {
-            const data = response.data;
-            console.log(data)
 
-            if (data.isAuthenticated) {
-                setLoading(false);
-                navigate('/chat');
-            }
-            if (data.type === 'error' || !data.isAuthenticated) {
-                console.log(data.type)
-                notify('error', data.message)
-                setErrorData(true);
+        setLoading(true);
+        axios
+            .post("/login", creds)
+            .then((response) => {
+                const data = response.data;
+
+                if (data.isAuthenticated) {
+                    setLoading(false);
+                    navigate("/chat");
+                }
+                if (data.type === "error" || !data.isAuthenticated) {
+                    console.log(data.type);
+                    toastNotify("error", data.message);
+                    setErrorData(true);
+                    setLoading(false);
+                    setLoginError(true);
+                    setCreds({ email: "", password: "" });
+                    form.current.reset();
+                }
+            })
+            .catch((error) => {
+                toastNotify("error", error.message);
                 setLoading(false);
                 setLoginError(true);
                 setCreds({ email: "", password: "" });
                 form.current.reset();
-            }
-        }).catch((error) => {
-            notify('error', error.message)
-            setLoading(false);
-            setLoginError(true);
-            setCreds({ email: "", password: "" });
-            form.current.reset();
-        });
-    }
+            });
+    };
 
     return (
         <div className="h-screen overflow-hidden">
@@ -92,7 +90,11 @@ const Login = () => {
                                 className={`input w-full max-w-xs input-bordered focus:outline-primary`}
                             />
                             <div className="flex justify-between px-4 items-center w-full">
-                                <button type="submit" disabled={loading} className="btn btn-primary w-24 disabled:cursor-not-allowed ml-auto">
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="btn btn-primary w-24 disabled:cursor-not-allowed ml-auto"
+                                >
                                     {!loading ? (
                                         <span>Sign in</span>
                                     ) : (

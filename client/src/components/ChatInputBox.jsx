@@ -22,7 +22,6 @@ const ChatInputBox = () => {
     };
 
     const blurHandler = () => {
-        console.log('test')
         if (!editable.current.innerText.length) return setPlaceholder('Type here...');
         setPlaceholder('');
     }
