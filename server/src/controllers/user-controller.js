@@ -17,14 +17,18 @@ export async function createUser(userInputData) {
     let user = null;
 
     try {
-        // returns null if nothing was found
         const emailUsed = await prisma.user.findFirst({
             where: { ["email"]: email },
         });
 
         if (!emailUsed) {
             user = await prisma.user.create({
-                data: { email: email, password: hashed, name: name, role: role },
+                data: {
+                    email: email,
+                    password: hashed,
+                    name: name,
+                    role: role,
+                },
             });
 
             return [user, error];
@@ -49,7 +53,8 @@ export async function authenticateUser(loginInput) {
     if (!user) return [user, { type: "error", message: "Invalid credentials" }];
 
     const match = await compare(password, user.password);
-    if (!match) return [user, { type: "error", message: "Invalid credentials" }];
+    if (!match)
+        return [user, { type: "error", message: "Invalid credentials" }];
     return [user, { type: "success", message: "Authenticated!" }];
 }
 
@@ -58,7 +63,9 @@ export async function authenticateUser(loginInput) {
  */
 export async function searchUserByEmail(email) {
     try {
-        const user = await prisma.user.findFirst({ where: { ["email"]: email } });
+        const user = await prisma.user.findFirst({
+            where: { ["email"]: email },
+        });
         let type = "error";
         let message = "User not found!";
 
