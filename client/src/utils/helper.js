@@ -1,24 +1,23 @@
-
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
 /**
- * Creates an artificial delay.
+ * Creates an artificial delay. NOTE: Only use this in development to test some features.
  * @param {number} delay in milliseconds
  */
 export const sleep = (delay) => new Promise((r) => setTimeout(r, delay));
 
 /**
  * Get cookie value.
- * @param {string} name 
+ * @param {string} name
  */
 export const getCookie = (name) => {
     const cookie = document.cookie
-        .split(';')
-        .find(c => c.includes(name))
-        .split('=')[1];
+        .split(";")
+        .find((c) => c.includes(name))
+        .split("=")[1];
 
     return cookie;
-}
+};
 
 /**
  * @param {string} name
@@ -28,11 +27,10 @@ export const toastNotify = (type, message) => toast[type](message);
 
 /**
  * Returns an array with unique objects.
- * @param {Array} arr 
+ * @param {Array} arr
  * @param {string} identifier unique identifier of an object - like ID
  */
 export const uniqueObjectsArray = (arr, identifier) => {
-    
     const uniqueIds = [];
     const uniqueArr = [];
 
@@ -44,4 +42,4 @@ export const uniqueObjectsArray = (arr, identifier) => {
     }
 
     return uniqueArr;
-}
+};

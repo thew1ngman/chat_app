@@ -19,6 +19,7 @@ import cors from "cors";
 import path from "path";
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
+global.__sessionID = null;
 
 config();
 
@@ -66,13 +67,17 @@ app.post("/login", validateUser, async (req, res, next) => {
         });
     });
     req.session.user = req.user;
+    __sessionID = req.session.id;
     res.cookie("user.id", req.user.id, { maxAge: req.session.cookie.maxAge })
-        .cookie("user.role", req.user.role, { maxAge: req.session.cookie.maxAge })
+        .cookie("user.role", req.user.role, {
+            maxAge: req.session.cookie.maxAge,
+        })
         .json({ isAuthenticated: true });
 });
 
 app.get("/logout", (req, res) => {
     req.session.destroy();
+    __sessionID = null;
     res.clearCookie("user.id")
         .clearCookie("user.role")
         .clearCookie("session.id")
@@ -80,10 +85,12 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/create-user", async (req, res) => {
-    if (req.session.user.role.toLowerCase() != "admin")
+    console.log(req.session.user);
+    if (req.session.user.role.toLowerCase() != "admin") {
         return res
             .status(401)
             .json([null, { type: "error", message: "Unauthorized request." }]);
+    }
     const data = await createUser(req.body);
     res.json(data);
 });
@@ -114,23 +121,17 @@ app.post("/get-user-contacts", async (req, res) => {
 });
 
 io.on("connection", (socket) => {
-    socket.on("chat message", (msg) => {
-        console.log("message: ", msg);
-        if (msg === "/disconnect") {
-            socket.disconnect();
-            console.log("Server disconnected!");
-        }
-        if (msg === "/reconnect") {
-            socket.disconnect();
-            console.log("Server disconnected!");
-        }
+    if (__sessionID == null) socket.disconnect();
+
+    socket.on("chat message", (data) => {
+        console.log("message-data: ", data);
     });
 
     socket.on("disconnect", (reason) => console.log("Disconnected:", reason));
-
-    console.log("User connection established! ID:", socket.id);
+    console.log("User connection established!");
 });
 
 server.listen(port, () => {
     console.log(`App is listening on port ${port}.`);
 });
+
