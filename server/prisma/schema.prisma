@@ -11,15 +11,17 @@ model chat {
   id             Int       @id @default(autoincrement())
   conversationId String
   chatline       chatline?
+  createdAt   DateTime?      @default(now())
 }
 
 model chatline {
-  id       BigInt @id @default(autoincrement()) @db.UnsignedBigInt
-  lineText String @db.Text
-  chatId   Int    @unique(map: "ChatLine_chatId_key")
-  userId   Int    @unique(map: "ChatLine_userId_key")
-  chat     chat   @relation(fields: [chatId], references: [id], map: "ChatLine_chatId_fkey")
-  user     user   @relation(fields: [userId], references: [id], map: "ChatLine_userId_fkey")
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  lineText  String   @db.Text
+  chatId    Int      @unique(map: "ChatLine_chatId_key")
+  userId    Int      @unique(map: "ChatLine_userId_key")
+  chat      chat     @relation(fields: [chatId], references: [id], map: "ChatLine_chatId_fkey")
+  user      user     @relation(fields: [userId], references: [id], map: "ChatLine_userId_fkey")
+  createdAt DateTime @default(now())
 }
 
 model contactlist {
@@ -39,6 +41,8 @@ model user {
   role        user_role
   chatline    chatline?
   contactlist contactlist[]
+  createdAt   DateTime?      @default(now())
+  updatedAt   DateTime?      @updatedAt
 }
 
 enum user_role {
