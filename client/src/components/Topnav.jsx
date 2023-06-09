@@ -1,7 +1,7 @@
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import useUserContactStore from "@_store/user-contacts";
 import { useNavigate } from "react-router-dom";
-import useChatStore from "@_store/chats";
+import useChatStore, { socket } from "@_store/chats";
 import ThemeChange from "./ThemeChange";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ const Topnav = () => {
         axios.get("/logout").then(() => {
             clearChats();
             clearContacts();
-            window.socket.disconnect();
+            socket.disconnect();
             navigate("/login");
         });
     };

@@ -11,12 +11,16 @@ export const sleep = (delay) => new Promise((r) => setTimeout(r, delay));
  * @param {string} name
  */
 export const getCookie = (name) => {
-    const cookie = document.cookie
-        .split(";")
-        .find((c) => c.includes(name))
-        .split("=")[1];
-
-    return cookie;
+    if (document.cookie.length > 0) {
+        const cookie = document.cookie
+            .split(";")
+            .find((c) => c.includes(name))
+            .split("=")[1];
+    
+        return cookie;
+    } else {
+        window.location.href = "/";
+    }
 };
 
 /**
@@ -28,7 +32,7 @@ export const toastNotify = (type, message) => toast[type](message);
 /**
  * Returns an array with unique objects.
  * @param {Array} arr
- * @param {string} identifier unique identifier of an object - like ID
+ * @param {string} identifier unique identifier of an object - like an ID
  */
 export const uniqueObjectsArray = (arr, identifier) => {
     const uniqueIds = [];

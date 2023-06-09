@@ -17,6 +17,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import path from "path";
+import ioHandler from "./src/connections/socket-io.js";
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
 global.__sessionID = null;
@@ -120,16 +121,7 @@ app.post("/get-user-contacts", async (req, res) => {
     return res.json(queryData);
 });
 
-io.on("connection", (socket) => {
-    if (__sessionID == null) socket.disconnect();
-
-    socket.on("chat message", (data) => {
-        console.log("message-data: ", data);
-    });
-
-    socket.on("disconnect", (reason) => console.log("Disconnected:", reason));
-    console.log("User connection established!");
-});
+io.on("connection", (socket) => ioHandler(socket));
 
 server.listen(port, () => {
     console.log(`App is listening on port ${port}.`);

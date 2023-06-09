@@ -8,6 +8,7 @@ import Login from "@_pages/Login";
 import Chat from "@_pages/Chat";
 import Root from "@_pages/Root";
 import SingleChatRoom from "@_pages/chat/single-conversation/SingleChatRoom";
+import ErrorElement from "@_components/ErrorElement";
 
 const router = createBrowserRouter([
     {
@@ -54,7 +55,8 @@ const router = createBrowserRouter([
                     }
                 ],
             }
-        ]
+        ],
+        errorElement: <ErrorElement />
     },
 ])
 
