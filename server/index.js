@@ -1,5 +1,12 @@
-import { addToContacts, deleteUserContact, getUserContacts } from "./src/controllers/contact-list-controller.js";
-import { createUser, searchUserByEmail } from "./src/controllers/user-controller.js";
+import {
+    addToContacts,
+    deleteUserContact,
+    getUserContacts,
+} from "./src/controllers/contact-list-controller.js";
+import {
+    createUser,
+    searchUserByEmail,
+} from "./src/controllers/user-controller.js";
 import { validateUser } from "./src/middlewares/auth.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -66,12 +73,17 @@ app.post("/login", validateUser, async (req, res, next) => {
 
 app.get("/logout", (req, res) => {
     req.session.destroy();
-    res.clearCookie("user.id").clearCookie("user.role").clearCookie("session.id").json({ isAuthenticated: false });
+    res.clearCookie("user.id")
+        .clearCookie("user.role")
+        .clearCookie("session.id")
+        .json({ isAuthenticated: false });
 });
 
 app.post("/create-user", async (req, res) => {
     if (req.session.user.role.toLowerCase() != "admin")
-        return res.status(401).json([null, { type: "error", message: "Unauthorized request." }]);
+        return res
+            .status(401)
+            .json([null, { type: "error", message: "Unauthorized request." }]);
     const data = await createUser(req.body);
     res.json(data);
 });
@@ -83,7 +95,10 @@ app.post("/search-user", async (req, res) => {
 
 app.post("/add-user-contact", async (req, res) => {
     const { userId, contactUserId } = req.body;
-    const queryData = await addToContacts(parseInt(userId), parseInt(contactUserId));
+    const queryData = await addToContacts(
+        parseInt(userId),
+        parseInt(contactUserId)
+    );
     return res.json(queryData);
 });
 
@@ -91,7 +106,7 @@ app.delete("/delete-user-contact", async (req, res) => {
     const { db_id } = req.body;
     const deleteQuery = await deleteUserContact(db_id);
     return res.json(deleteQuery);
-})
+});
 
 app.post("/get-user-contacts", async (req, res) => {
     const queryData = await getUserContacts(parseInt(req.body.userId));
