@@ -17,8 +17,6 @@ const ChatHistory = () => {
                 top: listItem.current.clientHeight * chats.length,
             });
         }
-
-        console.log(chats);
     }, [chats.length]);
 
     return (

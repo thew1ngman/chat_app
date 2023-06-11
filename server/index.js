@@ -1,12 +1,10 @@
 import {
     addToContacts,
+    createUser,
     deleteUserContact,
     getUserContacts,
-} from "./src/controllers/contact-list-controller.js";
-import {
-    createUser,
     searchUserByEmail,
-} from "./src/controllers/user-controller.js";
+} from "./src/controllers/_index-controller.js";
 import connectionHandler from "./src/connections/socket-io.js";
 import { validateUser } from "./src/middlewares/auth.js";
 import cookieParser from "cookie-parser";
@@ -80,7 +78,7 @@ app.post("/login", validateUser, async (req, res, next) => {
 app.get("/logout", (req, res) => {
     storeAction("delete", `${req.session.user.id}_sessionData`);
     storeAction("delete", `${req.session.user.id}_socketId`);
-    
+
     req.session.destroy();
 
     res.clearCookie("user.id")

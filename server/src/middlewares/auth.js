@@ -1,4 +1,4 @@
-import { authenticateUser } from "../controllers/user-controller.js";
+import { authenticateUser } from "../controllers/_index-controller.js";
 import storeAction from "../data/async-storage.js";
 import { readFile } from "../utils/helpers.js";
 

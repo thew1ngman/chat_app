@@ -2,8 +2,13 @@ import Sidenav from "@_components/Sidenav";
 import Topnav from "@_components/Topnav";
 import useChatStore, { socket } from "@_store/chats.js";
 import { getCookie } from "@_utils/helper";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+
+const DESTINATION_UNAVAILABLE = "destination-unavailable";
+const MESSAGE_SENT = "message-sent";
+const MESSAGE_RECEIVED = "message-received";
+
 
 const Chat = () => {
     const { chats, storeChat } = useChatStore((state) => state);
@@ -23,18 +28,23 @@ const Chat = () => {
     }, []);
 
     useEffect(() => {
-        socket.on("message-sent", (data) => {
+        socket.on(MESSAGE_SENT, (data) => {
             storeChat(data);
-            console.log("message-sent");
+            console.log(MESSAGE_SENT);
         });
-        socket.on("message-received", (data) => {
+        socket.on(MESSAGE_RECEIVED, (data) => {
             storeChat(data);
-            console.log("message-received");
+            console.log(MESSAGE_RECEIVED);
+        });
+        socket.on(DESTINATION_UNAVAILABLE, (data) => {
+            storeChat(data);
+            console.log(DESTINATION_UNAVAILABLE);
         });
 
         return () => {
-            socket.removeListener("message-sent");
-            socket.removeListener("message-received");
+            socket.removeListener(MESSAGE_SENT);
+            socket.removeListener(MESSAGE_RECEIVED);
+            socket.removeListener(DESTINATION_UNAVAILABLE);
         };
     }, [chats.length]);
 

@@ -3,10 +3,10 @@ import storeAction from "../data/async-storage.js";
 import { nanoid } from "nanoid";
 
 // Socket user events
-const SEND_MESSAGE = "send-message"
-const DESTINATION_UNAVAILABLE = "destination-unavailable"
-const MESSAGE_SENT = "message-sent"
-const MESSAGE_RECEIVED = "message-received"
+const SEND_MESSAGE = "send-message";
+const DESTINATION_UNAVAILABLE = "destination-unavailable";
+const MESSAGE_SENT = "message-sent";
+const MESSAGE_RECEIVED = "message-received";
 
 /**
  * @param {Socket} socket
@@ -17,37 +17,35 @@ export default async function connectionHandler(socket) {
         socket.user = data;
     });
 
-
     socket.on(SEND_MESSAGE, (data) => {
-        const sessionId = storeAction("get", `${data.originUser}_sessionData`);
-        if (!sessionId.sessionId) return socket.disconnect();
+        const userSessionData = storeAction(
+            "get",
+            `${data.originUser}_sessionData`
+        );
+        if (!userSessionData.sessionId) return socket.disconnect();
 
         const destinationId = storeAction(
             "get",
             `${data.destinationId}_socketId`
         );
 
-        data.uuid = nanoid(); // to avoid duplicates in the client
+        data.uuid = nanoid(); // to avoid duplicates in the client, remove this once DB is set
 
         // TODO: save chatline in DB
         if (!destinationId) {
             socket.emit(DESTINATION_UNAVAILABLE, data);
-            console.log(`USER:${data.destinationId} unavailable. ${destinationId}`)
         } else {
-            console.log("Message sent!", Date.now().toLocaleString());
             socket.to(destinationId).emit(MESSAGE_RECEIVED, data);
             socket.emit(MESSAGE_SENT, data);
         }
 
         console.log("message-data: ", data);
-        console.log(sessionId, socket.id, destinationId);
+        console.log(userSessionData, socket.id, destinationId);
     });
-
 
     socket.on("disconnect", (reason) => {
-        console.log("Disconnected:", reason, '@server', socket.user?.id);
+        console.log("Disconnected:", reason, "@server", socket.user?.id);
     });
-
 
     console.log("User connection established!");
 }
