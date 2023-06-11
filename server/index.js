@@ -7,6 +7,7 @@ import {
     createUser,
     searchUserByEmail,
 } from "./src/controllers/user-controller.js";
+import connectionHandler from "./src/connections/socket-io.js";
 import { validateUser } from "./src/middlewares/auth.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -17,10 +18,9 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import path from "path";
-import ioHandler from "./src/connections/socket-io.js";
+import storeAction from "./src/data/async-storage.js";
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
-global.__sessionID = null;
 
 config();
 
@@ -33,20 +33,20 @@ const io = new Server(server, {
     },
 });
 
+const sessionMiddleware = session({
+    name: "session.id",
+    secret: process.env.SECRET_TOKEN,
+    resave: false,
+    saveUninitialized: false,
+    sameSite: "none",
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 7 }, // 7 days
+});
+
 app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-    session({
-        name: "session.id",
-        secret: process.env.SECRET_TOKEN,
-        resave: false,
-        saveUninitialized: false,
-        sameSite: "none",
-        cookie: { secure: false, maxAge: 1000 * 60 * 60 * 7 }, // 7 days
-    })
-);
+app.use(sessionMiddleware);
 
 app.get("/", async (_, res) => {
     res.json("Nothing to see here.");
@@ -67,8 +67,9 @@ app.post("/login", validateUser, async (req, res, next) => {
             if (err) return next(err);
         });
     });
+
     req.session.user = req.user;
-    __sessionID = req.session.id;
+
     res.cookie("user.id", req.user.id, { maxAge: req.session.cookie.maxAge })
         .cookie("user.role", req.user.role, {
             maxAge: req.session.cookie.maxAge,
@@ -77,8 +78,11 @@ app.post("/login", validateUser, async (req, res, next) => {
 });
 
 app.get("/logout", (req, res) => {
+    storeAction("delete", `${req.session.user.id}_sessionData`);
+    storeAction("delete", `${req.session.user.id}_socketId`);
+    
     req.session.destroy();
-    __sessionID = null;
+
     res.clearCookie("user.id")
         .clearCookie("user.role")
         .clearCookie("session.id")
@@ -121,9 +125,8 @@ app.post("/get-user-contacts", async (req, res) => {
     return res.json(queryData);
 });
 
-io.on("connection", (socket) => ioHandler(socket));
+io.on("connection", (socket) => connectionHandler(socket));
 
 server.listen(port, () => {
     console.log(`App is listening on port ${port}.`);
 });
-

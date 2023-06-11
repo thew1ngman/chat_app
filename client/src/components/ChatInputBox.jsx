@@ -15,7 +15,7 @@ const ChatInputBox = () => {
 
         if (!text) return editable.current.focus();
 
-        socket.emit('chat message', {
+        socket.emit('send-message', {
             originUser: parseInt(getCookie('user.id')),
             destinationId: parseInt(currentDestination.id) || null, // null on group ID or user ID
             isGroupChat: currentDestination.isGroupChat || false,

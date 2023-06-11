@@ -3,7 +3,28 @@
 @tailwind utilities;
 
 @layer base {
-    body, html {
+    body,
+    html {
         height: 100%;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+       @apply bg-neutral rounded
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-primary/50
     }
 }

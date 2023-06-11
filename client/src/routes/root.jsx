@@ -1,14 +1,14 @@
+import SingleChatRoom from "@_pages/chat/single-conversation/SingleChatRoom";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import SingleConversation from "@_pages/chat/SingleConversation";
 import GroupConversation from "@_pages/chat/GroupConversation";
+import ErrorElement from "@_components/ErrorElement";
 import CreateUser from "@_pages/chat/CreateUser";
 // import Contacts from "@_pages/chat/Contacts";
 import Guard from "@_components/Guard";
 import Login from "@_pages/Login";
 import Chat from "@_pages/Chat";
 import Root from "@_pages/Root";
-import SingleChatRoom from "@_pages/chat/single-conversation/SingleChatRoom";
-import ErrorElement from "@_components/ErrorElement";
 
 const router = createBrowserRouter([
     {

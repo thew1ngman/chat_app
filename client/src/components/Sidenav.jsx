@@ -14,7 +14,7 @@ const Sidenav = () => {
 
 
     return (
-        <aside className="h-full bg-base-100">
+        <aside className="h-full bg-base-100 inline-block">
             <ul className="h-full flex flex-col pt-1 px-1">
                 {
                     links.map((link, index) => {

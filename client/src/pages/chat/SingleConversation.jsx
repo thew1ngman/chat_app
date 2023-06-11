@@ -32,7 +32,7 @@ const SingleConversation = () => {
     }, []);
 
     return (
-        <div className="w-full flex">
+        <div className="h-full flex w-full">
             <SideList name="Chats">
                 <ContactList contacts={contacts} />
             </SideList>

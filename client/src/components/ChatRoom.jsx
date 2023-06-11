@@ -3,7 +3,7 @@ import ChatInputBox from "./ChatInputBox";
 
 const ChatRoom = () => {
     return (
-        <div className="w-full py-2.5 px-3 flex flex-col justify-between gap-4">
+        <div className="w-full py-2.5 px-3 flex flex-col gap-2">
             <ChatHistory />
             <ChatInputBox />
         </div>
