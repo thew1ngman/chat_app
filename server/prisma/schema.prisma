@@ -9,9 +9,13 @@ datasource db {
 
 model chat {
   id             Int       @id @default(autoincrement())
-  conversationId String
+  conversationId String?   @unique // only for private chats. conversationID will become room ID when is_group is true. TODO: rework this later
+  is_group       Boolean   @default(false)
+  members        Json?
   chatline       chatline?
-  createdAt   DateTime?      @default(now())
+  createdAt      DateTime  @default(now())
+
+  @@index(fields: [conversationId])
 }
 
 model chatline {
@@ -41,8 +45,8 @@ model user {
   role        user_role
   chatline    chatline?
   contactlist contactlist[]
-  createdAt   DateTime?      @default(now())
-  updatedAt   DateTime?      @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
 }
 
 enum user_role {
