@@ -54,7 +54,7 @@ const SearchPeople = () => {
                         </button>
                     </div>
                     <div className="divider my-3"></div>
-                    {searchedUser?.id && <UserCard userData={searchedUser} atContactList={false} userHandler={setSearchedUser}/>}
+                    {searchedUser?.id && <UserCard contactUserData={searchedUser} atContactList={false} userHandler={setSearchedUser}/>}
                 </form>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

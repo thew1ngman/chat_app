@@ -47,3 +47,8 @@ export const uniqueObjectsArray = (arr, identifier) => {
 
     return uniqueArr;
 };
+
+
+export const conversationIdFormat = (userId, contactUserId) => {
+    return [userId, contactUserId].sort().join('|');
+}

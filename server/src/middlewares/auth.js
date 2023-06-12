@@ -3,10 +3,6 @@ import storeAction from "../data/async-storage.js";
 import { readFile } from "../utils/helpers.js";
 
 /**
- * @typedef {string} __basedir
- */
-
-/**
  * Middleware to check if the user is authenticated.
  * @param {import('express').Request} req
  * @param {import('express').Response} res

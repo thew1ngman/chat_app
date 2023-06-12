@@ -24,7 +24,7 @@ const ContactList = ({ contacts }) => {
                                 return `${active}w-full block rounded-lg`;
                             }}
                         >
-                            <UserCard userData={contact} atContactList={true} />
+                            <UserCard contactUserData={contact} atContactList={true} />
                         </NavLink>
                     </li>
                 ))}

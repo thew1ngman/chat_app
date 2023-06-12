@@ -1,13 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 import { responseData } from "../utils/helpers.js";
+import { createChat } from "./_index-controller.js";
 
 /**
  * @param {PrismaClient} prisma
  */
 export default function ContactListController(prisma) {
     /**
-     * @param {number} userId
-     * @param {number} contactUserId
+     * @param {Number} userId
+     * @param {Number} contactUserId
      */
     async function addToContacts(userId, contactUserId) {
         try {
@@ -15,8 +16,9 @@ export default function ContactListController(prisma) {
                 where: { userId: userId, contactUserId: contactUserId },
             });
 
-            if (exist)
+            if (exist) {
                 return responseData(null, "error", "User already in contacts.");
+            }
 
             const contact = await prisma.contactlist.create({
                 data: {
@@ -48,26 +50,47 @@ export default function ContactListController(prisma) {
                         },
                     },
                 });
+
+                const chat = await createChat(userId, contactUserId);
+                
+                userContact.user.chatId = chat[0].id;
+                
+                console.log(userContact);
+
                 return responseData(
                     userContact,
                     "success",
                     "Contact added successfully."
                 );
             }
-            return responseData(null, "error", "SERVER: Unable to add!");
+            return responseData(
+                null,
+                "error",
+                "SERVER: Unable to add contact."
+            );
         } catch (error) {
             console.log(error);
             return responseData(null, "error", `SERVER: ${error.message}`);
         }
     }
 
-    async function deleteUserContact(id) {
+    /**
+     * @param {string|number} id
+     * @param {string} conversationId
+     */
+    async function deleteUserContact(id, conversationId) {
         try {
             const contact = await prisma.contactlist.delete({
                 where: { id: id },
             });
 
-            return responseData(contact, "success", `Contact deleted.`);
+            const chat = await prisma.chat.delete({
+                where: { conversationId: conversationId },
+            });
+
+            console.log(chat, contact);
+
+            return responseData(null, "success", `Contact|Chat deleted.`);
         } catch (error) {
             return responseData(null, "error", `SERVER: ${error.message}`);
         }
@@ -111,6 +134,6 @@ export default function ContactListController(prisma) {
     return {
         addToContacts,
         deleteUserContact,
-        getUserContacts
-    }
+        getUserContacts,
+    };
 }

@@ -1,12 +1,13 @@
 import {
+    deleteUserContact,
+    searchUserByEmail,
+    getUserContacts,
     addToContacts,
     createUser,
-    deleteUserContact,
-    getUserContacts,
-    searchUserByEmail,
 } from "./src/controllers/_index-controller.js";
 import connectionHandler from "./src/connections/socket-io.js";
 import { validateUser } from "./src/middlewares/auth.js";
+import storeAction from "./src/data/async-storage.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { fileURLToPath } from "url";
@@ -16,7 +17,6 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import path from "path";
-import storeAction from "./src/data/async-storage.js";
 
 global.__basedir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -109,12 +109,13 @@ app.post("/add-user-contact", async (req, res) => {
         parseInt(userId),
         parseInt(contactUserId)
     );
+
     return res.json(queryData);
 });
 
 app.delete("/delete-user-contact", async (req, res) => {
-    const { db_id } = req.body;
-    const deleteQuery = await deleteUserContact(db_id);
+    const { db_id, conversationId } = req.body;
+    const deleteQuery = await deleteUserContact(db_id, conversationId);
     return res.json(deleteQuery);
 });
 

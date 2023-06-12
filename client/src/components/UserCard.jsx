@@ -1,30 +1,29 @@
 import useUserContactStore from "@_store/user-contacts";
-import { getCookie, toastNotify } from "@_utils/helper";
+import { conversationIdFormat, getCookie, toastNotify } from "@_utils/helper";
 import { EllipsisVerticalIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
-const UserCard = ({ userData, atContactList, userHandler }) => {
-    const { id, name, email } = userData;
-    const { storeContact, deleteContact } = useUserContactStore((state) => state);
-
-    const openDropdown = (e) => {
-        e.preventDefault();
-        // deleteFromContactList(e);
-    };
-
+const UserCard = ({ contactUserData, atContactList, userHandler }) => {
+    const { id, name, email, chatId } = contactUserData;
+    const { storeContact, deleteContact, contacts } = useUserContactStore((state) => state);
+    
     const addToContactList = (e) => {
         e.preventDefault();
 
         axios
             .post("/add-user-contact", {
                 userId: getCookie("user.id"),
-                contactUserId: userData.id,
+                contactUserId: contactUserData.id,
             })
             .then((res) => {
                 const [contact, extraData] = res.data;
-                // toastNotify(extraData.type, extraData.message);
+
+                if (extraData.type === "error") {
+                    toastNotify(extraData.type, extraData.message);
+                }
                 if (contact != null) {
                     storeContact([{ ...contact.user, db_id: contact.id }]);
+                    console.log(contacts);
                     userHandler(null);
                 }
             })
@@ -38,12 +37,17 @@ const UserCard = ({ userData, atContactList, userHandler }) => {
 
         axios
             .delete("/delete-user-contact", {
-                data: { db_id: userData.db_id },
+                data: {
+                    db_id: contactUserData.db_id,
+                    conversationId: conversationIdFormat(getCookie("user.id"), contactUserData.id),
+                },
             })
             .then((res) => {
                 const [_, extraData] = res.data;
-                // toastNotify(extraData.type, extraData.message);
-                deleteContact(userData.db_id);
+                if (extraData.type === "error") {
+                    toastNotify(extraData.type, extraData.message);
+                }
+                deleteContact(contactUserData.db_id);
             })
             .catch((err) => {
                 toastNotify("error", err.message);
