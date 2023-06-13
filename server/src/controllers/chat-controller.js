@@ -29,6 +29,8 @@ export default function ChatController(prisma) {
                     conversationId: conversationIdFormat(userId, contactUserId),
                 },
             });
+
+            return responseData(chat, "success", "Chat id retrieved");
         } catch (err) {
             return responseData(chat, "error", err.message);
         }

@@ -15,7 +15,7 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        border-radius: 10px;
+        @apply rounded
     }
 
     /* Handle */
