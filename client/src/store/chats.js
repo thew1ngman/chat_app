@@ -9,11 +9,21 @@ export const socket = io(import.meta.env.VITE_AXIOS_BASE_URL, {
 const useChatStore = create((set) => ({
     chats: [],
     currentDestination: { id: null, isGroupChat: false },
-    storeChat: (payload) =>
+    /**
+     * @param {Array} payload
+     * @param {Boolean} isBulk
+     */
+    storeChat: (payload, isBulk) =>
         set((state) => {
-            return {
-                chats: uniqueObjectsArray([...state.chats, payload], "uuid"),
-            };
+            if (isBulk) {
+                return {
+                    chats: uniqueObjectsArray(state.chats.concat(payload), "uuid"),
+                };
+            } else {
+                return {
+                    chats: uniqueObjectsArray([...state.chats, payload], "uuid"),
+                };
+            }
         }),
     setCurrentDestinationData: (payload) => set(() => ({ currentDestination: payload })),
     clearChats: () => set(() => ({ contacts: [] })),

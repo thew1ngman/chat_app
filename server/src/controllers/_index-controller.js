@@ -9,5 +9,5 @@ const prisma = new PrismaClient();
 
 export const { addToContacts, deleteUserContact, getUserContacts } = ContactListController(prisma);
 export const { createUser, authenticateUser, searchUserByEmail, saveUserChatLine } = UserController(prisma);
-export const { createChat, conversationIdFormat } = ChatController(prisma);
+export const { createOrFindChat, conversationIdFormat, getChatLines } = ChatController(prisma);
 export const { createChatLine } = ChatLineController(prisma);

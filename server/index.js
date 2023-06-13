@@ -4,6 +4,7 @@ import {
     getUserContacts,
     addToContacts,
     createUser,
+    getChatLines,
 } from "./src/controllers/_index-controller.js";
 import connectionHandler from "./src/connections/socket-io.js";
 import { validateUser } from "./src/middlewares/auth.js";
@@ -123,6 +124,11 @@ app.post("/get-user-contacts", async (req, res) => {
     const queryData = await getUserContacts(parseInt(req.body.userId));
     return res.json(queryData);
 });
+
+app.post("/get-chatlines", async (req, res) => {
+    const queryData = await getChatLines(req.body.chatId);
+    return res.json(queryData);
+})
 
 io.on("connection", (socket) => connectionHandler(socket));
 

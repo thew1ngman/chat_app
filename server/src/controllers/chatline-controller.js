@@ -51,7 +51,19 @@ export default function ChatLineController(prisma) {
         }
     }
 
+    // function chatlineFormat(data) {
+    //     return {
+    //         chatId: data.chatId,
+    //         uuid: userChatLine.chatlines[0].id,
+    //         originUser: userChatLine.id,
+    //         // destinationId: destinationId,
+    //         message: userChatLine.chatlines[0].lineText,
+    //         createdAt: userChatLine.chatlines[0].createdAt,
+    //     };
+    // }
+
     return {
         createChatLine,
+        // chatlineFormat,
     };
 }

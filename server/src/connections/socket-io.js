@@ -35,7 +35,7 @@ export default async function connectionHandler(socket) {
 
         const chatlineQueryData = await saveUserChatLine(data);
 
-        console.log("[1]", chatlineQueryData, destinationSocketId);
+        console.log("[1]", chatlineQueryData);
 
         data.uuid = nanoid(); // to avoid duplicates in the client, remove this once DB is set
 

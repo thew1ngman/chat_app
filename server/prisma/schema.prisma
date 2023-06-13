@@ -19,7 +19,7 @@ model chat {
 }
 
 model chatline {
-  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id        Int      @id @default(autoincrement())
   lineText  String   @db.Text
   chatId    Int
   userId    Int

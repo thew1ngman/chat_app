@@ -103,19 +103,29 @@ export default function UserController(prisma) {
     }
 
     async function saveUserChatLine(requestData) {
-        const { chatId, originUser, message } = requestData;
+        const { chatId, originUser, message, destinationId } = requestData;
         let userChatLine = null;
-
-        // const user = await prisma.user.findFirst({
-        //     where: { id: originUser },
-        // });
-
-        // console.log("[user-chatline]", storeAction(), originUser);
 
         try {
             const userEmail = storeAction("get", `${originUser}_email`);
             userChatLine = await prisma.user.update({
                 where: { email: userEmail },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    chatlines: {
+                        where: {
+                            chat: {
+                                id: chatId,
+                            },
+                        },
+                        orderBy: {
+                            createdAt: "desc",
+                        },
+                        take: 1,
+                    },
+                },
                 data: {
                     chatlines: {
                         create: {
@@ -123,14 +133,23 @@ export default function UserController(prisma) {
                             chat: {
                                 connect: {
                                     id: chatId,
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             });
 
-            return responseData(userChatLine, "success", "Message saved.");
+            const mappedChatline = {
+                chatId: chatId,
+                uuid: userChatLine.chatlines[0].id,
+                originUser: userChatLine.id,
+                // destinationId: destinationId,
+                message: userChatLine.chatlines[0].lineText,
+                createdAt: userChatLine.chatlines[0].createdAt,
+            };
+
+            return responseData(mappedChatline, "success", "Message saved.");
         } catch (error) {
             return responseData(userChatLine, "error", error.message);
         }
