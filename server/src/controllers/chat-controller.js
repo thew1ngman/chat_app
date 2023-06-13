@@ -44,8 +44,6 @@ export default function ChatController(prisma) {
     async function getChatLines(chatId) {
         let chat = null;
 
-        console.log("[chat-controller]", BigInt(chatId));
-
         try {
             chat = await prisma.chat.findFirst({
                 where: { id: parseInt(chatId) },

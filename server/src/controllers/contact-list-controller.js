@@ -86,13 +86,11 @@ export default function ContactListController(prisma) {
                 where: { id: id },
             });
 
-            const chat = await prisma.chat.delete({
-                where: { conversationId: conversationId },
-            });
+            // const chat = await prisma.chat.delete({
+            //     where: { conversationId: conversationId },
+            // });
 
-            console.log(chat, contact);
-
-            return responseData(null, "success", `Contact|Chat deleted.`);
+            return responseData(contact, "success", `Contact|Chat deleted.`);
         } catch (error) {
             return responseData(null, "error", `SERVER: ${error.message}`);
         }
