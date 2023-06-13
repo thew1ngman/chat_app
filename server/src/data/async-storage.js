@@ -5,7 +5,7 @@ const storage = new Map();
 
 /**
  * 
- * @param {("get"|"set"|"clear"|"delete")} action 
+ * @param {("get"|"set"|"clear"|"delete") | null} action 
  * @param {string?} key 
  * @param {*} value 
  */
@@ -26,6 +26,7 @@ export default function storeAction(action, key, value) {
                     returnValue = store[action]();
                     break;
                 default:
+                    returnValue = store;
                     break;
             }
         })

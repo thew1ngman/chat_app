@@ -5,14 +5,17 @@ import { useParams } from "react-router-dom";
 
 const SingleChatRoom = () => {
     const { setCurrentDestinationData } = useChatStore((state) => state);
-    const { contactName } = useParams(); //value is encoded. looks weird in URL if it isn't. haha
+    const { pathName } = useParams(); //value is encoded. looks weird in URL if it isn't. haha
 
     useEffect(() => {
+        const param = atob(pathName).split("_"); // idx 0 is contactUserId; last idx is chatId
+
         setCurrentDestinationData({
-            id: atob(contactName).split("_")[0],
+            id: param[0],
             isGroupChat: false,
+            chatId: param[param.length - 1],
         });
-    }, [contactName]);
+    }, [pathName]);
 
     return <ChatRoom />;
 };

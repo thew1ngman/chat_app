@@ -6,9 +6,10 @@ const ContactList = ({ contacts }) => {
      * @param {string} contactName
      * @param {number} contactID
      */
-    const str = (contactName, contactID) => {
-        return btoa(`${contactID}_` + contactName.toLowerCase().replace(/\s/g, "_"));
-    }
+    const str = (contactID, chatId) => {
+        return btoa(
+            `${contactID}_${chatId}`);
+    };
 
     return (
         <div>
@@ -16,7 +17,7 @@ const ContactList = ({ contacts }) => {
                 {contacts.map((contact, index) => (
                     <li key={index}>
                         <NavLink
-                            to={str(contact.name, contact.id)}
+                            to={str(contact.id, contact.chatId)}
                             className={({ isActive }) => {
                                 const active = isActive
                                     ? "bg-gradient-to-r from-primary/20 via-primary/20 to-secondary/10 "

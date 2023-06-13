@@ -1,12 +1,10 @@
 import useUserContactStore from "@_store/user-contacts";
-import ChatInputBox from "@_components/ChatInputBox";
 import ContactList from "@_components/ContactList";
-import ChatHistory from "@_components/ChatHistory";
 import SideList from "@_components/SideList";
 import { getCookie } from "@_utils/helper";
+import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { Outlet } from "react-router-dom";
 
 const SingleConversation = () => {
     const { contacts, storeContact } = useUserContactStore();
@@ -19,7 +17,8 @@ const SingleConversation = () => {
                 
                 if (userContacts == null) console.error(extraData.message);
                 const mapped = userContacts.map(contact => {
-                    contact.user.db_id = contact.id;
+                    contact.user.contactListId = contact.id;
+                    contact.user.chatId = contact.chatId;
                     return contact.user;
                 })
                 storeContact(mapped);

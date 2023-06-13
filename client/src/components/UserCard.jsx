@@ -22,7 +22,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
                     toastNotify(extraData.type, extraData.message);
                 }
                 if (contact != null) {
-                    storeContact([{ ...contact.user, db_id: contact.id }]);
+                    storeContact([{ ...contact.user, contactListId: contact.id }]);
                     console.log(contacts);
                     userHandler(null);
                 }
@@ -38,7 +38,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
         axios
             .delete("/delete-user-contact", {
                 data: {
-                    db_id: contactUserData.db_id,
+                    contactListId: contactUserData.contactListId,
                     conversationId: conversationIdFormat(getCookie("user.id"), contactUserData.id),
                 },
             })
@@ -47,7 +47,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
                 if (extraData.type === "error") {
                     toastNotify(extraData.type, extraData.message);
                 }
-                deleteContact(contactUserData.db_id);
+                deleteContact(contactUserData.contactListId);
             })
             .catch((err) => {
                 toastNotify("error", err.message);

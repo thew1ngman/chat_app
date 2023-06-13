@@ -12,14 +12,16 @@ const ChatInputBox = () => {
     const sendMessage = (e) => {
         e.preventDefault();
         const text = editable.current.innerText;
+        const { id, isGroupChat, chatId } = currentDestination;
 
         if (!text) return editable.current.focus();
 
         socket.emit('send-message', {
             originUser: parseInt(getCookie('user.id')),
-            destinationId: parseInt(currentDestination.id) || null, // null on group ID or user ID
-            isGroupChat: currentDestination.isGroupChat || false,
-            message: text
+            destinationId: parseInt(id) || null, // null on group ID or user ID
+            isGroupChat: isGroupChat || false,
+            message: text,
+            chatId: parseInt(chatId),
         }); //window.socket initialized at Chat.jsx
 
         editable.current.innerText = "";

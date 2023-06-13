@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import storeAction from "../data/async-storage.js";
 import { nanoid } from "nanoid";
+import { saveUserChatLine } from "../controllers/_index-controller.js";
 
 // Socket user events
 const SEND_MESSAGE = "send-message";
@@ -17,30 +18,37 @@ export default async function connectionHandler(socket) {
         socket.user = data;
     });
 
-    socket.on(SEND_MESSAGE, (data) => {
+    socket.on(SEND_MESSAGE, async (data) => {
         const userSessionData = storeAction(
             "get",
             `${data.originUser}_sessionData`
         );
-        if (!userSessionData.sessionId) return socket.disconnect();
 
-        const destinationId = storeAction(
+        if (!userSessionData?.sessionId) return socket.disconnect();
+
+        const destinationSocketId = storeAction(
             "get",
             `${data.destinationId}_socketId`
         );
 
+        // console.log("[0]", storeAction());
+
+        const chatlineQueryData = await saveUserChatLine(data);
+
+        console.log("[1]", chatlineQueryData, destinationSocketId);
+
         data.uuid = nanoid(); // to avoid duplicates in the client, remove this once DB is set
 
         // TODO: save chatline in DB
-        if (!destinationId) {
+        if (!destinationSocketId) {
             socket.emit(DESTINATION_UNAVAILABLE, data);
         } else {
-            socket.to(destinationId).emit(MESSAGE_RECEIVED, data);
+            socket.to(destinationSocketId).emit(MESSAGE_RECEIVED, data);
             socket.emit(MESSAGE_SENT, data);
         }
 
-        console.log("message-data: ", data);
-        console.log(userSessionData, socket.id, destinationId);
+        console.log("[2]", "message-data: ", data);
+        // console.log("[3]", userSessionData, socket.id, destinationSocketId);
     });
 
     socket.on("disconnect", (reason) => {

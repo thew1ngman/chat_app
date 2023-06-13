@@ -8,12 +8,12 @@ datasource db {
 }
 
 model chat {
-  id             Int       @id @default(autoincrement())
-  conversationId String?   @unique // only for private chats. conversationID will become room ID when is_group is true. TODO: rework this later
-  is_group       Boolean   @default(false)
+  id             Int        @id @default(autoincrement())
+  conversationId String?    @unique // only for private chats. conversationID will become room ID when is_group is true. TODO: rework this later
+  is_group       Boolean    @default(false)
   members        Json?
-  chatline       chatline?
-  createdAt      DateTime  @default(now())
+  chatlines      chatline[]
+  createdAt      DateTime   @default(now())
 
   @@index(fields: [conversationId])
 }
@@ -21,10 +21,10 @@ model chat {
 model chatline {
   id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   lineText  String   @db.Text
-  chatId    Int      @unique(map: "ChatLine_chatId_key")
-  userId    Int      @unique(map: "ChatLine_userId_key")
-  chat      chat     @relation(fields: [chatId], references: [id], map: "ChatLine_chatId_fkey")
-  user      user     @relation(fields: [userId], references: [id], map: "ChatLine_userId_fkey")
+  chatId    Int
+  userId    Int
+  chat      chat     @relation(fields: [chatId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
 
@@ -32,18 +32,16 @@ model contactlist {
   id            Int  @id @default(autoincrement())
   userId        Int
   contactUserId Int
-  user          user @relation(fields: [contactUserId], references: [id], map: "ContactList_contactUserId_fkey")
-
-  @@index([contactUserId], map: "ContactList_contactUserId_fkey")
+  user          user @relation(fields: [contactUserId], references: [id])
 }
 
 model user {
   id          Int           @id @default(autoincrement())
-  email       String        @unique(map: "User_email_key") @db.VarChar(255)
+  email       String        @unique @db.VarChar(255)
   password    String
   name        String?       @db.VarChar(255)
   role        user_role
-  chatline    chatline?
+  chatlines   chatline[]
   contactlist contactlist[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime?     @updatedAt

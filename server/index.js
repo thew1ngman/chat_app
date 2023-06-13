@@ -114,8 +114,8 @@ app.post("/add-user-contact", async (req, res) => {
 });
 
 app.delete("/delete-user-contact", async (req, res) => {
-    const { db_id, conversationId } = req.body;
-    const deleteQuery = await deleteUserContact(db_id, conversationId);
+    const { contactListId, conversationId } = req.body;
+    const deleteQuery = await deleteUserContact(contactListId, conversationId);
     return res.json(deleteQuery);
 });
 

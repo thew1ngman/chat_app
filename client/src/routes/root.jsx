@@ -36,7 +36,7 @@ const router = createBrowserRouter([
                         element: <SingleConversation />,
                         children: [
                             {
-                                path: ':contactName',
+                                path: ':pathName',
                                 element: <SingleChatRoom />
                             }
                         ]
@@ -45,10 +45,6 @@ const router = createBrowserRouter([
                         path: "group-conversations",
                         element: <GroupConversation />
                     },
-                    // {
-                    //     path: "contacts",
-                    //     element: <Contacts />
-                    // },
                     {
                         path: "create-user",
                         element: <CreateUser />

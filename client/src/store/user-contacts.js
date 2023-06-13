@@ -10,9 +10,9 @@ const useUserContactStore = create(
                 const newArr = uniqueObjectsArray([...state.contacts, ...payload], "id");
                 return { contacts: newArr };
             }),
-        deleteContact: (db_id) =>
+        deleteContact: (contactListId) =>
             set((state) => {
-                return { contacts: state.contacts.filter((c) => c.db_id !== db_id) };
+                return { contacts: state.contacts.filter((c) => c.contactListId !== contactListId) };
             }),
         clearContacts: () => set(() => ({ contacts: [] })),
     }))

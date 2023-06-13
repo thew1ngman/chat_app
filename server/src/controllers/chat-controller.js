@@ -33,4 +33,16 @@ export default function ChatController(prisma) {
         createChat,
         conversationIdFormat,
     };
+
+
+    // async function getChatLines(chatId) {
+    //     const chatlines = await prisma.chat.findMany({
+    //         where: {
+    //             id: chatId,
+    //             chatline: {
+
+    //             }
+    //         }
+    //     })
+    // }
 }

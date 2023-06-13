@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { responseData } from "../utils/helpers.js";
-import { createChat } from "./_index-controller.js";
+import { conversationIdFormat, createChat } from "./_index-controller.js";
 
 /**
  * @param {PrismaClient} prisma
@@ -52,9 +52,9 @@ export default function ContactListController(prisma) {
                 });
 
                 const chat = await createChat(userId, contactUserId);
-                
+
                 userContact.user.chatId = chat[0].id;
-                
+
                 console.log(userContact);
 
                 return responseData(
@@ -118,16 +118,38 @@ export default function ContactListController(prisma) {
                 },
             });
 
-            if (!userContacts)
+            if (!userContacts) {
                 return responseData(
                     userContacts,
                     "error",
                     "No contacts found."
                 );
+            }
+
+            for (let i = 0; i < userContacts.length; i++) {
+                const contactId = userContacts[i].user.id;
+                const chatId = await getChatId(userId, contactId);
+                userContacts[i].chatId = chatId;
+            }
+
             return responseData(userContacts, "success", "Contacts fetched.");
         } catch (error) {
             console.log(error);
             responseData(null, "error", `SERVER: ${error.message}`);
+        }
+    }
+
+    async function getChatId(userId, contactUserId) {
+        try {
+            const chat = await prisma.chat.findFirst({
+                where: {
+                    conversationId: conversationIdFormat(userId, contactUserId),
+                },
+            });
+
+            return chat.id;
+        } catch (error) {
+            return null;
         }
     }
 

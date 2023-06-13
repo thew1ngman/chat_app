@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { hash, compare } from "bcrypt";
+import storeAction from "../data/async-storage.js";
+import { responseData } from "../utils/helpers.js";
 
 /**
  * @param {PrismaClient} prisma
@@ -60,12 +62,19 @@ export default function UserController(prisma) {
         const user = await prisma.user.findFirst({
             where: { ["email"]: email },
         });
-        if (!user)
+
+        if (!user) {
             return [user, { type: "error", message: "Invalid credentials" }];
+        }
 
         const match = await compare(password, user.password);
-        if (!match)
+
+        if (!match) {
             return [user, { type: "error", message: "Invalid credentials" }];
+        }
+
+        storeAction("set", `${user.id}_email`, user.email);
+
         return [user, { type: "success", message: "Authenticated!" }];
     }
 
@@ -93,9 +102,44 @@ export default function UserController(prisma) {
         }
     }
 
+    async function saveUserChatLine(requestData) {
+        const { chatId, originUser, message } = requestData;
+        let userChatLine = null;
+
+        // const user = await prisma.user.findFirst({
+        //     where: { id: originUser },
+        // });
+
+        // console.log("[user-chatline]", storeAction(), originUser);
+
+        try {
+            const userEmail = storeAction("get", `${originUser}_email`);
+            userChatLine = await prisma.user.update({
+                where: { email: userEmail },
+                data: {
+                    chatlines: {
+                        create: {
+                            lineText: message,
+                            chat: {
+                                connect: {
+                                    id: chatId,
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return responseData(userChatLine, "success", "Message saved.");
+        } catch (error) {
+            return responseData(userChatLine, "error", error.message);
+        }
+    }
+
     return {
         createUser,
         authenticateUser,
-        searchUserByEmail
-    }
+        searchUserByEmail,
+        saveUserChatLine,
+    };
 }
