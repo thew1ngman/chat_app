@@ -2,6 +2,7 @@ import useUserContactStore from "@_store/user-contacts";
 import { conversationIdFormat, getCookie, toastNotify } from "@_utils/helper";
 import { EllipsisVerticalIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+import Avatar from "./Avatar";
 
 const UserCard = ({ contactUserData, atContactList, userHandler }) => {
     const { id, name, email, chatId } = contactUserData;
@@ -88,14 +89,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
     return (
         <div className="px-4 py-2.5 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
-                <div className="avatar">
-                    <div className="w-9 h-9 rounded-full">
-                        <img
-                            src={`https://api.dicebear.com/6.x/thumbs/svg?&backgroundColor=1EAE98&seed=${name}`}
-                            alt="avatar"
-                        />
-                    </div>
-                </div>
+                <Avatar name={name} />
                 <div className="space-y-0.5">
                     <div className="text-sm space-x-1">
                         <span>{name}</span>

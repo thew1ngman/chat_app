@@ -30,14 +30,12 @@ export default async function connectionHandler(socket) {
             "get",
             `${data.destinationId}_socketId`
         );
-
         // console.log("[0]", storeAction());
 
         const chatlineQueryData = await saveUserChatLine(data);
 
         data.uuid = nanoid(); // to avoid duplicates in the client, remove this once DB is set
 
-        // TODO: save chatline in DB
         if (!destinationSocketId) {
             socket.emit(DESTINATION_UNAVAILABLE, data);
         } else {
@@ -45,7 +43,7 @@ export default async function connectionHandler(socket) {
             socket.emit(MESSAGE_SENT, data);
         }
 
-        console.log("[2]", "message-data: ", data);
+        // console.log("[2]", "message-data: ", data);
         // console.log("[3]", userSessionData, socket.id, destinationSocketId);
     });
 

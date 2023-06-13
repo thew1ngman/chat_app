@@ -27,7 +27,7 @@ export async function validateUser(req, res, next) {
     if (email == "admin@email.com") {
         // initial user to setup other accounts
         const { users } = await readFile(
-            `${__basedir}\\src\\data\\dummy-users.json`
+            `${__basedir}/src/data/dummy-users.json`
         );
         userData = users.find(
             (user) => user.email === email && user.password === password

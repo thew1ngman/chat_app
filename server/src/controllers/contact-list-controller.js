@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { responseData } from "../utils/helpers.js";
 import { conversationIdFormat, createOrFindChat } from "./_index-controller.js";
+import { responseData } from "../utils/helpers.js";
+import { PrismaClient } from "@prisma/client";
 
 /**
  * @param {PrismaClient} prisma
@@ -52,12 +52,7 @@ export default function ContactListController(prisma) {
                 });
 
                 const chat = await createOrFindChat(userId, contactUserId);
-
-                console.log(chat);
-
                 userContact.user.chatId = chat[0].id;
-
-                console.log(userContact);
 
                 return responseData(
                     userContact,
