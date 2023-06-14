@@ -155,10 +155,50 @@ export default function UserController(prisma) {
         }
     }
 
+
+    async function newContactListRequest(currentUserId, targetUserId) {
+        try {
+            const contactListRequest = await prisma.user.update({
+                where: { id: currentUserId },
+                data: {
+                    contactlist_requests: {
+                        create: {
+                            target_user_id: parseInt(targetUserId)
+                        }
+                    }
+                }
+            })
+
+            responseData(contactListRequest, "success", "Requests retrieved.")
+        } catch (error) {
+            responseData(null, "error", error.message)
+        }
+    }
+
+
+    // async function deleteContactListRequest(currentUserId, targetUserId) {
+    //     try {
+    //         const contactListRequest = await prisma.user.update({
+    //             where: { id: currentUserId },
+    //             data: {
+    //                 contactlist_requests: {
+    //                     delete: {
+                            
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     } catch (error) {
+    //         responseData(null, "error", error.message)
+    //     }
+    // }
+    
+
     return {
         createUser,
         authenticateUser,
         searchUserByEmail,
         saveUserChatLine,
+        newContactListRequest
     };
 }

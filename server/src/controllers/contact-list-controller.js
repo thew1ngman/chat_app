@@ -1,4 +1,4 @@
-import { conversationIdFormat, createOrFindChat } from "./_index-controller.js";
+import { conversationIdFormat, createOrFindChat, newContactListRequest } from "./_index-controller.js";
 import { responseData } from "../utils/helpers.js";
 import { PrismaClient } from "@prisma/client";
 
@@ -50,6 +50,8 @@ export default function ContactListController(prisma) {
                         },
                     },
                 });
+
+                await newContactListRequest(userId, contactUserId);
 
                 const chat = await createOrFindChat(userId, contactUserId);
                 userContact.user.chatId = chat[0].id;
@@ -151,9 +153,34 @@ export default function ContactListController(prisma) {
         }
     }
 
+
+    async function getContactListRequests(currentUserId) {
+        try {
+            const contactListRequests = await prisma.contactlist_requests.findMany({
+                where: { target_user_id: currentUserId },
+                include: {
+                    origin_user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            role: true,
+                        }
+                    },
+                }
+            });
+
+            return responseData(contactListRequests, 'success', 'Contact List requests retrieved.')
+        } catch (error) {
+            responseData(null, "error", error.message)
+        }
+    }
+    
+
     return {
         addToContacts,
         deleteUserContact,
         getUserContacts,
+        getContactListRequests, 
     };
 }

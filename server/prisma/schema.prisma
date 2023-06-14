@@ -1,53 +1,63 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model chat {
-  id             Int        @id @default(autoincrement())
-  conversationId String?    @unique // only for private chats. conversationID will become room ID when is_group is true. TODO: rework this later
-  is_group       Boolean    @default(false)
-  members        Json?
-  chatlines      chatline[]
-  createdAt      DateTime   @default(now())
+    id             Int        @id @default(autoincrement())
+    conversationId String?    @unique // only for private chats. conversationID will become room ID when is_group is true. TODO: rework this later
+    is_group       Boolean    @default(false)
+    members        Json?
+    chatlines      chatline[]
+    createdAt      DateTime   @default(now())
 
-  @@index(fields: [conversationId])
+    @@index(fields: [conversationId])
 }
 
 model chatline {
-  id        Int      @id @default(autoincrement())
-  lineText  String   @db.Text
-  chatId    Int
-  userId    Int
-  chat      chat     @relation(fields: [chatId], references: [id])
-  user      user     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+    id        Int      @id @default(autoincrement())
+    lineText  String   @db.Text
+    chatId    Int
+    userId    Int
+    chat      chat     @relation(fields: [chatId], references: [id])
+    user      user     @relation(fields: [userId], references: [id])
+    createdAt DateTime @default(now())
 }
 
 model contactlist {
-  id            Int  @id @default(autoincrement())
-  userId        Int
-  contactUserId Int
-  user          user @relation(fields: [contactUserId], references: [id])
+    id            Int  @id @default(autoincrement())
+    userId        Int
+    contactUserId Int
+    user          user @relation(fields: [contactUserId], references: [id])
 }
 
 model user {
-  id          Int           @id @default(autoincrement())
-  email       String        @unique @db.VarChar(255)
-  password    String
-  name        String?       @db.VarChar(255)
-  role        user_role
-  chatlines   chatline[]
-  contactlist contactlist[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?     @updatedAt
+    id                   Int                    @id @default(autoincrement())
+    email                String                 @unique @db.VarChar(255)
+    password             String
+    name                 String?                @db.VarChar(255)
+    role                 user_role
+    chatlines            chatline[]
+    contactlist          contactlist[]
+    contactlist_requests contactlist_requests[]
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime?              @updatedAt
+}
+
+model contactlist_requests {
+    id           Int      @id @default(autoincrement())
+    origin_user_id Int
+    target_user_id   Int
+    origin_user  user     @relation(fields: [origin_user_id], references: [id])
+    is_rejected  Boolean  @default(false)
+    createdAt    DateTime @default(now())
 }
 
 enum user_role {
-  USER
-  ADMIN
+    USER
+    ADMIN
 }

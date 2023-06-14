@@ -4,8 +4,8 @@ import { EllipsisVerticalIcon, PlusSmallIcon } from "@heroicons/react/24/outline
 import axios from "axios";
 import Avatar from "./Avatar";
 
-const UserCard = ({ contactUserData, atContactList, userHandler }) => {
-    const { id, name, email, chatId } = contactUserData;
+const UserCard = ({ contactUserData, atContactList, atContactRequests, userHandler }) => {
+    const { id, name, email } = contactUserData;
     const { storeContact, deleteContact, contacts } = useUserContactStore((state) => state);
     
     const addToContactList = (e) => {
@@ -25,7 +25,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
                 if (contact != null) {
                     storeContact([{ ...contact.user, contactListId: contact.id }]);
                     console.log(contacts);
-                    userHandler(null);
+                    if (!atContactRequests) userHandler(null);
                 }
             })
             .catch((err) => {
@@ -49,6 +49,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
                     toastNotify(extraData.type, extraData.message);
                 }
                 deleteContact(contactUserData.contactListId);
+                window.location.pathname = "/chat/conversations"; // useNavigate breaks the dropdown
             })
             .catch((err) => {
                 toastNotify("error", err.message);
@@ -80,7 +81,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
         <button
             onClick={addToContactList}
             title="Add to Contacts"
-            className="w-10 h-10 rounded-full hover:bg-base-200 flex ml-auto items-center justify-center"
+            className="w-10 h-10 rounded-full hover:bg-primary/25 flex ml-auto items-center justify-center"
         >
             <PlusSmallIcon className="w-6 h-6" />
         </button>
@@ -94,6 +95,7 @@ const UserCard = ({ contactUserData, atContactList, userHandler }) => {
                     <div className="text-sm space-x-1">
                         <span>{name}</span>
                         {id == getCookie("user.id") && <span className="text-xs font-bold text-primary">YOU</span>}
+                        {atContactRequests && <span className="inline-block text-xs font-bold bg-error rounded-full text-base-200 h-2.5 w-2.5"></span>}
                     </div>
                     {!atContactList && <div className="text-xs text-base-content">{email}</div>}
                 </div>
