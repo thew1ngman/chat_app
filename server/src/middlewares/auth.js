@@ -24,7 +24,7 @@ export async function validateUser(req, res, next) {
     let userData = null;
     let extra = null;
 
-    if (email == "admin@email.com") {
+    if (email == "admin@email.com" && process.env.ENVIRONMENT !== "production") {
         // initial user to setup other accounts
         const { users } = await readFile(
             `${__basedir}/src/data/dummy-users.json`

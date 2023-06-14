@@ -32,9 +32,8 @@ const SingleConversation = () => {
         axios
             .post("/get-user-contact-list-requests", { userId: getCookie("user.id") })
             .then((res) => {
-                const [data, extraData] = res.data;
+                const [data, _] = res.data;
 
-                console.log(data);
                 setContactListRequests(data);
             })
             .catch((err) => console.error(err.message));

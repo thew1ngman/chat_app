@@ -56,17 +56,9 @@ export default function ContactListController(prisma) {
                 const chat = await createOrFindChat(userId, contactUserId);
                 userContact.user.chatId = chat[0].id;
 
-                return responseData(
-                    userContact,
-                    "success",
-                    "Contact added successfully."
-                );
+                return responseData(userContact, "success", "Contact added successfully.");
             }
-            return responseData(
-                null,
-                "error",
-                "SERVER: Unable to add contact."
-            );
+            return responseData(null, "error", "SERVER: Unable to add contact.");
         } catch (error) {
             console.log(error);
             return responseData(null, "error", `SERVER: ${error.message}`);
@@ -119,11 +111,7 @@ export default function ContactListController(prisma) {
             });
 
             if (!userContacts) {
-                return responseData(
-                    userContacts,
-                    "error",
-                    "No contacts found."
-                );
+                return responseData(userContacts, "error", "No contacts found.");
             }
 
             for (let i = 0; i < userContacts.length; i++) {
@@ -153,7 +141,6 @@ export default function ContactListController(prisma) {
         }
     }
 
-
     async function getContactListRequests(currentUserId) {
         try {
             const contactListRequests = await prisma.contactlist_requests.findMany({
@@ -165,22 +152,29 @@ export default function ContactListController(prisma) {
                             name: true,
                             email: true,
                             role: true,
+                            _count: {
+                                select: {
+                                    chatlines: true
+                                }
+                            }
                         }
                     },
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
             });
 
-            return responseData(contactListRequests, 'success', 'Contact List requests retrieved.')
+            return responseData(contactListRequests, "success", "Contact List requests retrieved.");
         } catch (error) {
-            responseData(null, "error", error.message)
+            responseData(null, "error", error.message);
         }
     }
-    
 
     return {
         addToContacts,
         deleteUserContact,
         getUserContacts,
-        getContactListRequests, 
+        getContactListRequests,
     };
 }

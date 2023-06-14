@@ -162,6 +162,9 @@ export default function UserController(prisma) {
                 where: { id: currentUserId },
                 data: {
                     contactlist_requests: {
+                        deleteMany: {  // delete all previous requests
+                            target_user_id: parseInt(targetUserId),
+                        },
                         create: {
                             target_user_id: parseInt(targetUserId)
                         }
@@ -176,23 +179,26 @@ export default function UserController(prisma) {
     }
 
 
-    // async function deleteContactListRequest(currentUserId, targetUserId) {
-    //     try {
-    //         const contactListRequest = await prisma.user.update({
-    //             where: { id: currentUserId },
-    //             data: {
-    //                 contactlist_requests: {
-    //                     delete: {
-                            
-    //                     }
-    //                 }
-    //             }
-    //         });
-    //     } catch (error) {
-    //         responseData(null, "error", error.message)
-    //     }
-    // }
-    
+    async function rejectContactListRequest(originUserId, currentUserId) {
+        try {
+            const deleteContactRequest = await prisma.user.update({
+                where: { id: originUserId },
+                data: {
+                    contactlist_requests: {
+                        where: { target_user_id: currentUserId },
+                        update: {
+                            data: {
+                                is_rejected: true,
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            responseData(null, "error", error.message)
+        }
+    }
+
 
     return {
         createUser,
